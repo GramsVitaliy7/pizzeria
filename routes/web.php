@@ -18,3 +18,19 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('users', 'UserController')->only('show');
+
+Route::resource('products', 'ProductController')->only(['index', 'show']);
+
+Route::group(['prefix' => 'shopping_cart', 'as' => 'shopping_cart.'], function () {
+//shopping cart operations (not entity)
+    Route::put('/{id}', 'ShoppingCartController@store')
+        ->name('store');
+    Route::patch('/', 'ShoppingCartController@update')
+        ->name('update');
+    Route::delete('/', 'ShoppingCartController@delete')
+        ->name('delete');
+    Route::get('/', 'ShoppingCartController@index')
+        ->name('index');
+});
