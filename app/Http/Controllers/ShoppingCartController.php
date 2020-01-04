@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ShoppingCart;
+use App\Services\ShoppingCart;
 use App\Models\Product;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
@@ -15,13 +14,14 @@ class ShoppingCartController extends Controller
      * Add the product to the shopping card.
      *
      * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function store($id)
+    public function store($id, Request $request)
     {
         $product = Product::findOrFail($id);
         try {
-            ShoppingCart::store($product);
+            ShoppingCart::store($product, $request);
             return response()->json(['message' => 'Product was added to cart successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['message' => 'Product was not added to cart!']);

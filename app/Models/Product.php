@@ -17,4 +17,12 @@ class Product extends Model
         'image_name',
         'description',
     ];
+
+    public function productVariants() {
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id');
+    }
+
+    public function productDopings() {
+        return $this->hasMany(ProductDoping::class, 'product_id', 'id');
+    }
 }

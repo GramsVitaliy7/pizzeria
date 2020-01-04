@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Helpers;
+namespace App\Services;
 
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
@@ -15,37 +16,48 @@ class ShoppingCart
      * Add the product to the shopping cart
      *
      * @param Product $product
+     * @param Request $request
      */
-    public static function store(Product $product)
+    public static function store(Product $product, Request $request)
     {
+       // session()->forget('cart');
         $cart = session()->get('cart');
-        // if this product is first
-        if (!$cart) {
-            $cart['products'][$product->id] = [
-                'title' => $product['title'],
-                'price' => $product['price'],
-                'SKU' => $product['SKU'],
-                'image_name' => $product['image_name'],
-                'amount' => 1,
-            ];
-            session()->put('cart', $cart);
-            return;
+
+        $temp = [
+            'title' => $product['title'],
+            'image_name' => $product['image_name'],
+            'size' => $request->input('size'),
+            'price' => ProductVariant::where('product_id', $product->id)
+                ->where('size', $request->input('size')),
+        ];
+
+        foreach ($request->input('dopings') as $element) {
+            array_push($temp['dopings'], $element);
         }
+
         // if this product exist (simple amount inc)
-        if (isset($cart[$product->id])) {
+        if (isset($cart['products'][$product->id])) {
             $cart['products'][$product->id]['amount']++;
+            $cart['total'] = ShoppingCart::getCartTotalPrice($cart);
             session()->put('cart', $cart);
             return;
         }
+        // if this product is first
+
+        $cart['total'] = ShoppingCart::getCartTotalPrice($cart);
+        session()->put('cart', $cart);
+        return;
+
         // if this item not exist in cart
-        $cart[$product->id] = [
+   /*     dd('nah');
+        $cart['products'][$product->id] = [
             'title' => $product->title,
             'price' => $product->price,
             'SKU' => $product->SKU,
             'image_name' => $product->image_name,
             'amount' => 1,
         ];
-        session()->put('cart', $cart);
+        session()->put('cart', $cart);*/
     }
 
     /**
@@ -85,7 +97,7 @@ class ShoppingCart
     {
         $total = 0;
         if ($cart) {
-            foreach ($cart as $id => $details) {
+            foreach ($cart['products'] as $id => $details) {
                 $total += $details['price'] * $details['amount'];
             }
         }

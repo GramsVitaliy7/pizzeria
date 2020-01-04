@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Contracts\Sessionable;
-use App\Helpers\ShoppingCart;
+use App\Services\ShoppingCart;
 use App\Models\Product;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
@@ -20,8 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->paginate(10);
-        return view('products.index', compact(['products']));
+        $products = Product::with(['productVariants', 'productDopings'])->latest()->paginate(16);
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -53,7 +52,13 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        return response()->json([
+            'title' => $product->title,
+            'image_name' =>$product->image_name,
+            'description' => $product->description,
+            'variants' => $product->productVariants,
+            'dopings' => $product->productDopings,
+        ]);
     }
 
     /**

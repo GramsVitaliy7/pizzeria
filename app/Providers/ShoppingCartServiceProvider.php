@@ -14,7 +14,7 @@ class ShoppingCartServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('App\Helpers\ShoppingCart', function(){
+        $this->app->singleton('App\Services\ShoppingCart', function(){
             return new ShoppingCart();
         });
     }

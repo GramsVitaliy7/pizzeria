@@ -52,6 +52,10 @@ $(document).ready(function () {
         $.ajax({
             url: $(self).data("url"),
             method: "PUT",
+            data: {
+                size: $(".modal-body").find('[name="size"]').val(),
+                dopings: $(".modal-body").find('[name="dopings"]').val(),
+            },
             success: function (response) {
                 console.log(response.success);
             },
