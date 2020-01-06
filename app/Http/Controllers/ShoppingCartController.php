@@ -24,7 +24,7 @@ class ShoppingCartController extends Controller
             ShoppingCart::store($product, $request);
             return response()->json(['message' => 'Product was added to cart successfully!']);
         } catch (\Exception $ex) {
-            return response()->json(['message' => 'Product was not added to cart!']);
+            return response()->json(['message' => $ex->getMessage()]);
         }
     }
 

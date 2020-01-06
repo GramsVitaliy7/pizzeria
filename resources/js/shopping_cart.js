@@ -53,8 +53,8 @@ $(document).ready(function () {
             url: $(self).data("url"),
             method: "PUT",
             data: {
-                size: $(".modal-body").find('[name="size"]').val(),
-                dopings: $(".modal-body").find('[name="dopings"]').val(),
+                variant: $(".modal-body").find('select[name="size"]').val(),
+                dopings: $(".modal-body").find('input[name="doping"]:checked').val().map(function() {return this.value;}).get()
             },
             success: function (response) {
                 console.log(response.success);
@@ -64,4 +64,6 @@ $(document).ready(function () {
             }
         });
     });
+
+
 });

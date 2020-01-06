@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ShoppingCart;
+use App\Models\ProductCategory;
+use App\Models\ProductDoping;
+use App\Models\ProductVariant;
 use App\Models\Product;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Throwable;
@@ -19,8 +20,84 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['productVariants', 'productDopings'])->latest()->paginate(16);
-        return view('products.index', compact('products'));
+        $products = Product::with([
+            'productCategory',
+            'productVariants',
+            'productDopings'
+        ])->latest()->paginate(16);
+        $categories = ProductCategory::whereNotNull('parent_id')->get()     //get all subcategories
+        ->sortBy('name');
+        return view('products.index', compact(['products', 'categories']));
+    }
+
+    /**
+     * Show the product in the pop up window.
+     *
+     * @param Product $product
+     * @return Renderable
+     */
+    public function show(Product $product)
+    {
+        $prices = [];
+        foreach ($product->productVariants as $variant) {
+            array_push($prices, $variant->price);
+        }
+        $min_price = min($prices);
+
+        return response()->json([
+            'url' => route('shopping_cart.store', $product->id),
+            'title' => $product->title,
+            'image_name' => $product->image_name,
+            'description' => $product->description,
+            'price' => $min_price,
+            'variants' => $product->productVariants,
+            'dopings' => $product->productDopings,
+        ]);
+    }
+
+    /**
+     * Calculate the product price using dopings and size data.
+     *
+     * @param Product $product
+     * @return Renderable
+     */
+    public function calculateProductPrice(Request $request)
+    {
+        $price = ProductVariant::find($request->input('variant'))->price;
+        $dopings = ProductDoping::find($request->input('dopings'));
+        $doping_price = 0;
+        if ($dopings) {
+            foreach ($dopings as $doping) {
+                $doping_price += $doping->price;
+            }
+        }
+        $total = $price + $doping_price;
+        return response()->json([
+            'price' => $total,
+        ]);
+    }
+
+
+    /**
+     * Filter the product list.
+     *
+     * @param Request $request
+     * @return Renderable
+     * @throws Throwable
+     */
+    public function filter(Request $request)
+    {
+        try {
+            $products = Product::with([
+                'productCategory',
+                'productVariants',
+                'productDopings'
+            ])->filter()->latest()->paginate(10);
+            $view = view('partials._products_table', compact('products'))->render();
+            return response()->json(['html' => $view]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Products was not found. Server error!']);
+        }
     }
 
     /**
@@ -44,22 +121,6 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Show the product.
-     *
-     * @param Product $product
-     * @return Renderable
-     */
-    public function show(Product $product)
-    {
-        return response()->json([
-            'title' => $product->title,
-            'image_name' =>$product->image_name,
-            'description' => $product->description,
-            'variants' => $product->productVariants,
-            'dopings' => $product->productDopings,
-        ]);
-    }
 
     /**
      * Show the form for editing the specified resource.

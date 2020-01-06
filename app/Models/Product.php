@@ -12,6 +12,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
+        'category_id',
         'title',
         'price',
         'image_name',
@@ -24,5 +25,19 @@ class Product extends Model
 
     public function productDopings() {
         return $this->hasMany(ProductDoping::class, 'product_id', 'id');
+    }
+
+    public function productCategory()
+    {
+        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+    }
+
+    public function scopeFilter($query)
+    {
+        //filter product category
+        if (request('category')) {
+            $query->where('category_id', '=', request('category'));
+        }
+        return $query;
     }
 }
