@@ -14,9 +14,9 @@ class ProductsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Product::class, 100)->create()->each(function ($product) {
-            factory(ProductVariant::class)->create(['product_id'=>$product->id]);
-            factory(ProductDoping::class)->create(['product_id'=>$product->id]);
+        factory(Product::class, 50)->make()->each(function ($product) {
+            factory(ProductVariant::class, 3)->create(['product_id'=>$product->id]);
+            factory(ProductDoping::class, 3)->create(['product_id'=>$product->id]);
         });
     }
 }

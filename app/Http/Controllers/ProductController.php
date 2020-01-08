@@ -25,6 +25,7 @@ class ProductController extends Controller
             'productVariants',
             'productDopings'
         ])->latest()->paginate(16);
+
         $categories = ProductCategory::whereNotNull('parent_id')->get()     //get all subcategories
         ->sortBy('name');
         return view('products.index', compact(['products', 'categories']));
@@ -38,12 +39,14 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $prices = [];
-        foreach ($product->productVariants as $variant) {
-            array_push($prices, $variant->price);
+        $min_price = 0;
+        if ($product->productVariants) {
+            $prices = [];
+            foreach ($product->productVariants as $variant) {
+                array_push($prices, $variant->price);
+            }
+            $min_price = min($prices);
         }
-        $min_price = min($prices);
-
         return response()->json([
             'url' => route('shopping_cart.store', $product->id),
             'title' => $product->title,
@@ -88,15 +91,18 @@ class ProductController extends Controller
     public function filter(Request $request)
     {
         try {
-            $products = Product::with([
-                'productCategory',
-                'productVariants',
-                'productDopings'
-            ])->filter()->latest()->paginate(10);
+            $products = Product::filter()
+                ->with([
+                    'productCategory',
+                    'productVariants',
+                    'productDopings'
+                ])
+                ->latest('products.created_at')
+                ->paginate(16);
             $view = view('partials._products_table', compact('products'))->render();
             return response()->json(['html' => $view]);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Products was not found. Server error!']);
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
 
@@ -105,7 +111,8 @@ class ProductController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public
+    function create()
     {
         //
     }
@@ -116,7 +123,8 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         //
     }
@@ -128,7 +136,8 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return Response
      */
-    public function edit(Product $product)
+    public
+    function edit(Product $product)
     {
         //
     }
@@ -140,7 +149,8 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return Response
      */
-    public function update(Request $request, Product $product)
+    public
+    function update(Request $request, Product $product)
     {
         //
     }
@@ -151,7 +161,8 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return Response
      */
-    public function destroy(Product $product)
+    public
+    function destroy(Product $product)
     {
         //
     }

@@ -4,7 +4,7 @@
             @endif
             <div class="col-md-3 col-sm-6">
                 <div class="card">
-                    <img src="{{ asset('storage/products/' . $product->id . '/' . $product->image_name) }}"
+                    <img src=""
                          class="card-img-top product-image"
                          alt="...">
                     <div class="card-body">

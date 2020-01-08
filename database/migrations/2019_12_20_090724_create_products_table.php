@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('title');
             $table->string('image_name')->nullable();
             $table->text('description')->nullable();
-            $table->decimal('rating',2, 1)->nullable();
+            $table->decimal('rating',2, 1)->default(0.0);
             $table->timestamps();
         });
     }

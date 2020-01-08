@@ -29,7 +29,7 @@ Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
     Route::get('/{product}', 'ProductController@show')->name('show')
         ->where('product', '[0-9]+');
     //filter products using category, asc, desc sorting
-    Route::get('/filter', 'ProductController@filter')->name('filter');
+    Route::post('/filter', 'ProductController@filter')->name('filter');
     //calculate the product price in the product details pop up window
     Route::post('/calculate_product_price', 'ProductController@calculateProductPrice')->name('calculate_product_price');
 });
