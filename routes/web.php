@@ -29,19 +29,26 @@ Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
     Route::get('/{product}', 'ProductController@show')->name('show')
         ->where('product', '[0-9]+');
     //filter products using category, asc, desc sorting
-    Route::post('/filter', 'ProductController@filter')->name('filter');
+    Route::post('/filter', 'ProductController@filter')
+        ->middleware('ajax_only')
+        ->name('filter');
     //calculate the product price in the product details pop up window
-    Route::post('/calculate_product_price', 'ProductController@calculateProductPrice')->name('calculate_product_price');
+    Route::post('/calculate_product_price', 'ProductController@calculateProductPrice')
+        ->middleware('ajax_only')
+        ->name('calculate_product_price');
 });
 
 
 Route::group(['prefix' => 'shopping_cart', 'as' => 'shopping_cart.'], function () {
     //shopping cart operations (not entity)
     Route::put('/{id}', 'ShoppingCartController@store')
+        ->middleware('ajax_only')
         ->name('store');
     Route::patch('/', 'ShoppingCartController@update')
+        ->middleware('ajax_only')
         ->name('update');
     Route::delete('/', 'ShoppingCartController@delete')
+        ->middleware('ajax_only')
         ->name('delete');
     Route::get('/', 'ShoppingCartController@index')
         ->name('index');
