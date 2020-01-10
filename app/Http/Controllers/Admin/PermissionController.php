@@ -13,6 +13,11 @@ use Throwable;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ajax_only')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the permissions.
      *
@@ -99,7 +104,7 @@ class PermissionController extends Controller
             $view = view('partials.admin._permissions_table', compact('permissions'))->render();
             return response()->json(['html' => $view, 'message' => 'Permission was deleted']);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Permission was not deleted']);
+            return response()->json(['message' => 'Permission was not deleted']);
         }
     }
 }

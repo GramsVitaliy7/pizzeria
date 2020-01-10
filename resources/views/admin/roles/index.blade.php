@@ -7,16 +7,16 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb">
                         <div class="pull-right">
-                            <a class="btn btn-success btn-sm" href="{{ route('admin.roles.create') }}"><i class="fa fa-plus" aria-hidden="true"></i> Add Permission</a>
+                            <a class="btn btn-success btn-sm" href="{{ route('admin.roles.create') }}"><i class="fa fa-plus" aria-hidden="true"></i> Add Role</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="success-operation" class="alert alert-success" style="display:none;">
+            <div class="success-operation alert alert-success" style="display:none;">
             </div>
 
-            <div id="error-operation" class="alert alert-warning" style="display:none;">
+            <div class="error-operation alert alert-warning" style="display:none;">
             </div>
 
             @if ($message = Session::get('success'))

@@ -14,7 +14,7 @@ $(document).ready(function() {
                 $('.error-operation').hide();
             },
             error: function (response) {
-                $('.error-operation').html(response.error).show();
+                $('.error-operation').html(response.message).show();
                 $('.success-operation').hide();
             }
         });

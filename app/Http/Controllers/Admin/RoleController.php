@@ -13,6 +13,10 @@ use Throwable;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ajax_only')->only(['destroy']);
+    }
     /**
      * Display a listing of the role.
      *
@@ -48,10 +52,7 @@ class RoleController extends Controller
             'name' => $request->input('name'),
         ])->save();
         $permissions = $request->input('permissions');
-        foreach ($permissions as $permission) {
-            $permission = Permission::find($permission);
-            $role->permissions()->attach($permission->id);
-        }
+        $role->permissions()->attach($permissions);
         return redirect()->route('admin.roles.index')
             ->with('success', 'Role was added successfully');
     }
@@ -76,7 +77,16 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permissions = $role->permissions();
+        $permissions = Permission::all()->sortBy('name');
+        $checked = $role->permissions->toArray();
+        $checkedIds = array_column($checked, 'id');
+        foreach ($permissions as $permission) {
+            if (in_array($permission->id, $checkedIds)) {
+                $permission['checked'] = true;
+            } else {
+                $permission['checked'] = false;
+            }
+        }
         return view('admin.roles.edit', compact(['role', 'permissions']));
     }
 
@@ -92,7 +102,7 @@ class RoleController extends Controller
         $role->fill([
             'name' => $request->input('name')
         ])->save();
-        return redirect()->route('admin.permissions.index')
+        return redirect()->route('admin.roles.index')
             ->with('success', 'Permission was updated successfully');
     }
 
@@ -109,10 +119,10 @@ class RoleController extends Controller
             $role->delete();
             $role->permissions()->detach();
             $roles = Role::with('permissions')->get()->sortBy('name');
-            $view = view('partials._roles_table', compact('roles'))->render();
+            $view = view('partials.admin._roles_table', compact('roles'))->render();
             return response()->json(['html' => $view, 'message' => 'Role was deleted']);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error! Role was not deleted']);
+            return response()->json(['message' => 'Role was not deleted']);
         }
     }
 }

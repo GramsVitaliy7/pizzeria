@@ -4,10 +4,11 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-left">
-                    <h3>Add New Permission</h3>
+                    <h3>Add New Role</h3>
                 </div>
                 <div class="pull-right">
-                    <button type="button" class="btn btn-link"><a href="{{ route('admin.roles.index') }}"> Back</a></button>
+                    <button type="button" class="btn btn-link"><a href="{{ route('admin.roles.index') }}"> Back</a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -25,15 +26,25 @@
                 </div>
             </div>
 
-            <div class="input-group mb-3">
-            @foreach($permissions as $permission)
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <input value="{{ $permission->id }}" type="checkbox" aria-label="Checkbox for following text input">
-                    </div>
+            <div class="row justify-content-md-center">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                    @foreach($permissions as $permission)
+                        <div class="row">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input value="{{ $permission->id }}" type="checkbox" name="permissions[]"
+                                               aria-label="Checkbox for following text input">
+                                    </div>
+                                </div>
+                                <input type="text" value="{{ $permission->name }}" class="form-control"
+                                       aria-label="Text input with checkbox" readonly>
+                            </div>
+                        </div>
+                    @endforeach
+
                 </div>
-                <input type="text" value="{{ $permission->name }}" class="form-control" aria-label="Text input with checkbox" readonly>
-            @endforeach
             </div>
             <div class="row justify-content-md-center">
                 <div class="col-xs-6 col-sm-6 col-md-6 text-center">

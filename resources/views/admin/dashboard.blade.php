@@ -15,6 +15,18 @@
                         Roles
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.product_categories.index') }}">
+                        <i class="fas fa-boxes"></i>
+                        Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.products.index') }}">
+                        <i class="fas fa-box-open"></i>
+                        Products
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -22,3 +34,4 @@
         @yield('dashboard-content')
     </div>
 @endsection
+

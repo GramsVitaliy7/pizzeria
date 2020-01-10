@@ -3,9 +3,11 @@
         <td>{{ $role->id }}</td>
         <td>{{ $role->name }}</td>
         <td>
-            @foreach($role->permissions as $permission)
-                {{ $permission->name }}
-            @endforeach
+            <ul>
+                @foreach($role->permissions as $permission)
+                    <li>{{ $permission->name }}</li>
+                @endforeach
+            </ul>
         </td>
         <td>
             @if ($role->created_at)

@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-left">
-                    <h3>Show Permission</h3>
+                    <h3>Show Role</h3>
                 </div>
                 <div class="pull-right">
                     <button type="button" class="btn btn-link"><a href="{{ route('admin.roles.index') }}"> Back</a></button>
