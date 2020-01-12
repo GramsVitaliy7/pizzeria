@@ -3,9 +3,25 @@
         <td>{{ $product->id }}</td>
         <td>{{ $product->productCategory->name }}</td>
         <td>{{ $product->title }}</td>
-        <td>{{ $product->price }}</td>
+        <td>
+            @if ($product->productVariants)
+                <ul>
+                    @foreach($product->productVariants as $variant)
+                        <li>Size {{ $variant->size}}: ${{ $variant->price }}</li>
+                    @endforeach
+                </ul>
+            @endif
+        </td>
+        <td>
+            @if ($product->productDopings)
+                <ul>
+                    @foreach($product->productDopings as $doping)
+                        <li>{{ $doping->name}}: ${{ $doping->price}}</li>
+                    @endforeach
+                </ul>
+            @endif
+        </td>
         <td>{{ $product->image_name }}</td>
-        <td>{{ $product->rating }}</td>
         <td>{{ $product->description }}</td>
         <td>{{ $product->rating }}</td>
         <td>

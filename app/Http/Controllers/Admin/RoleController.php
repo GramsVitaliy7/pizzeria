@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRole;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -42,10 +43,10 @@ class RoleController extends Controller
     /**
      * Store a newly created role in storage.
      *
-     * @param Request $request
+     * @param StoreRole $request
      * @return Redirect
      */
-    public function store(Request $request)
+    public function store(StoreRole $request)
     {
         $role = new Role();
         $role->fill([
@@ -93,11 +94,11 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param StoreRole $request
      * @param Role $role
      * @return Response
      */
-    public function update(Request $request, Role $role)
+    public function update(StoreRole $request, Role $role)
     {
         $role->fill([
             'name' => $request->input('name')

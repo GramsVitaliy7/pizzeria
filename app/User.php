@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Delivery;
+use App\Models\Order;
 use App\Models\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -42,5 +44,13 @@ class User extends Authenticatable
 
     public function roles() {
         return $this->belongsToMany(Role::class,'roles_permissions');
+    }
+
+    public function deliveries() {
+        return $this->hasMany(Delivery::class,'user_id');
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class,'user_id');
     }
 }

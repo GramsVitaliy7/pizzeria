@@ -39,7 +39,8 @@
                                 <th>id</th>
                                 <th>Category</th>
                                 <th>Title</th>
-                                <th>Price</th>
+                                <th>Variants</th>
+                                <th>Dopings</th>
                                 <th>Image_name</th>
                                 <th>Description</th>
                                 <th>Rating</th>

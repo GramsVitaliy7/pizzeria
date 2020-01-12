@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/js/delete_record.js": "/js/delete_record.js"
+    "/js/delete_record.js": "/js/delete_record.js",
+    "/js/create_update_product.js": "/js/create_update_product.js"
 }

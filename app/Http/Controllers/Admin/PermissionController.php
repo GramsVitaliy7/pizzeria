@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePermission;
 use App\Models\Permission;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -42,10 +43,10 @@ class PermissionController extends Controller
     /**
      * Store a newly created permission in storage.
      *
-     * @param Request $request
+     * @param StorePermission $request
      * @return Redirect
      */
-    public function store(Request $request)
+    public function store(StorePermission $request)
     {
         $permission = new Permission();
         $permission->fill($request->all())->save();
@@ -78,11 +79,11 @@ class PermissionController extends Controller
     /**
      * Update the specified permission in storage.
      *
-     * @param Request $request
+     * @param StorePermission $request
      * @param Permission $permission
      * @return Redirect
      */
-    public function update(Request $request, Permission $permission)
+    public function update(StorePermission $request, Permission $permission)
     {
         $permission->fill($request->all())->save();
         return redirect()->route('admin.permissions.index')

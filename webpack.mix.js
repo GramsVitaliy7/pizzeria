@@ -13,4 +13,5 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
-mix.scripts('resources/js/delete_record.js', 'public/js/delete_record.js');
+mix.scripts('resources/js/delete_record.js', 'public/js/delete_record.js')
+    .scripts('resources/js/create_update_product.js', 'public/js/create_update_product.js');

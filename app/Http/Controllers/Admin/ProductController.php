@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProduct;
 use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\ProductDoping;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Throwable;
 
@@ -24,7 +29,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('productCategory')->latest()->paginate(10);
+        $products = Product::with(['productCategory', 'productVariants', 'productDopings'])->latest()->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
@@ -40,21 +45,27 @@ class ProductController extends Controller
     }
 
     /**
-
      * Store a newly created product in storage.
      *
-     * @param Request $request
+     * @param StoreProduct $request
      * @return Redirect
      */
-    public function store(Request $request)
+    public function store(StoreProduct $request)
     {
+
         $product = new Product();
-        $product->fill($request->except(['image_name']));
+        $product->fill($request->except(['image_name', 'variants', 'dopings']));
         $product->setImageName();
         //associate with category and save record in database
-        $category = ProductCategory::find();
-        $product->productCategory()->associate($product->category_id);
+        $category = ProductCategory::findOrFail($request->input('category_id'));
+
+        $product->productCategory()->associate($category);
+
         $product->save();
+
+        $product->setVariantRelations();
+        $product->setDopingRelations();
+
         //save image in storage
         $image = $request->file('image');
         Storage::putFileAs('public/products/' . $product->id . '/', $image, $product->image_name);
@@ -88,21 +99,28 @@ class ProductController extends Controller
     /**
      * Update the specified product in storage.
      *
-     * @param Request $request
+     * @param StoreProduct $request
      * @param Product $product
      * @return Response
      */
-    public function update(Request $request, Product $product)
+    public function update(StoreProduct $request, Product $product)
     {
-        $product->fill($request->except(['image_name']));
+        $product->fill($request->except(['image_name', 'variants', 'dopings']));
         if (request('image')) {
             Storage::delete('public/products/' . $product->id . '/' . $product->image_name);
             $product->setImageName();
             $image = $request->file('image');
             Storage::putFileAs('public/products/' . $product->id . '/', $image, $product->image_name);
         }
-        $product->productCategory()->associate($request->input('category_id'));
-        $product->save();
+
+        $category = ProductCategory::findOrFail($request->input('category_id'));
+        $product->productCategory()->associate($category);
+        $product->productVariants()->delete();
+        $product->productDopings()->delete();
+        $product->setVariantRelations();
+        $product->setDopingRelations();
+
+
         return redirect()->route('admin.products.index')
             ->with('success', 'Product was updated successfully');
     }

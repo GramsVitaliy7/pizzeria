@@ -33,9 +33,14 @@ class StoreProduct extends FormRequest
                 $id = $this->route('product')->id;
         }
         return [
+            'category_id' => 'required|not_in:0',
             'title' => 'required|max:255|unique:products,title,' . $id,
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'variants.*.name' => 'required',
+            'variants.*.size' => 'required',
+            'variants.*.price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'image' => $required_image . 'image|mimes:jpeg,jpg,bmp,png|max:8192',
+            'dopings.*.price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'dopings.*.name' => 'required',
         ];
     }
 }

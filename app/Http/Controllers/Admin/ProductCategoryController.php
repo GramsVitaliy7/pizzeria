@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductCategory;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -42,10 +43,10 @@ class ProductCategoryController extends Controller
     /**
      * Store a newly created product category in storage.
      *
-     * @param Request $request
+     * @param StoreProductCategory $request
      * @return Redirect
      */
-    public function store(Request $request)
+    public function store(StoreProductCategory $request)
     {
         $productCategory = new ProductCategory();
         $productCategory->fill($request->all())->save();
@@ -79,11 +80,11 @@ class ProductCategoryController extends Controller
     /**
      * Update the specified product category in storage.
      *
-     * @param Request $request
+     * @param StoreProductCategory $request
      * @param ProductCategory $productCategory
      * @return Redirect
      */
-    public function update(Request $request, ProductCategory $productCategory)
+    public function update(StoreProductCategory $request, ProductCategory $productCategory)
     {
         $productCategory->fill($request->all())->save();
         return redirect()->route('admin.product_categories.index')
