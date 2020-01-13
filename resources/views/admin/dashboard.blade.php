@@ -27,6 +27,13 @@
                         Products
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.orders.index') }}">
+                        <i class="fas fa-truck-loading"></i>
+                        Orders
+                    </a>
+                </li>
+
             </ul>
         </div>
     </nav>

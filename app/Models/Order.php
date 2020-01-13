@@ -18,7 +18,7 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function selected_products()
+    public function selectedProducts()
     {
         return $this->belongsToMany(
             SelectedProduct::class,
@@ -28,17 +28,17 @@ class Order extends Model
             ->withPivot('amount');
     }
 
-    public function getOrderTotalPrice() {
+    public function getTotalAttribute() {
         $total = 0;
-        foreach ($this->selected_products as $product) {
+        foreach ($this->selectedProducts as $selectedProduct) {
             //calculate all dopings of the selected product
-            foreach ($product->productDopings as $doping) {
+            foreach ($selectedProduct->productDopings as $doping) {
                 $total += $doping->price;
             }
             //sum with the product variant price
-            $total += $product->productVariant->price;
+            $total += $selectedProduct->productVariant->price;
             //multiply with count of such products
-            $total *= $product->pivot->amount;
+            $total *= $selectedProduct->pivot->amount;
         }
         return $total;
     }

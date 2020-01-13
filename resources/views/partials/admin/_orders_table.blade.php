@@ -3,10 +3,10 @@
         <td>{{ $order->id }}</td>
         <td>{{ $order->user->name }}</td>
         <td>
-            {{ $order->total }}
+            ${{ number_format($order->total, 2) }}
         </td>
         <td>{{ $order->user->phone }}</td>
-        <td>{{ $order->address }}</td>
+        <td>{{ $order->delivery_address }}</td>
         <td>
             @if($order->created_at)
                 {{ $order->created_at->format('d-m-Y h:i:s') }}

@@ -15,7 +15,7 @@ class SelectedProduct extends Model
     ];
 
     public function productVariant() {
-        return $this->belongsTo(ProductVariant::class,'id');
+        return $this->belongsTo(ProductVariant::class,'product_variant_id');
     }
 
     public function productDopings() {

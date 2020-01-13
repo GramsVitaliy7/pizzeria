@@ -54,17 +54,18 @@
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
                     <strong>Total:</strong>
-                    {{ $order->total }}
+                    ${{ number_format($order->total, 2) }}
                 </div>
             </div>
         </div>
-
 
         <div class="row justify-content-md-center">
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
                     <strong>Created At:</strong>
-                    {{ $order->created_at->format('d-m-Y h:i:s') }}
+                    @if ($order->created_at)
+                        {{ $order->created_at->format('d-m-Y h:i:s') }}
+                    @endif
                 </div>
             </div>
         </div>
@@ -72,7 +73,9 @@
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
                     <strong>Updated At:</strong>
-                    {{ $order->updated_at->format('d-m-Y h:i:s') }}
+                    @if ($order->updated_at)
+                        {{ $order->updated_at->format('d-m-Y h:i:s') }}
+                    @endif
                 </div>
             </div>
         </div>

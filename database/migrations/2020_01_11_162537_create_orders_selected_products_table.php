@@ -17,6 +17,7 @@ class CreateOrdersSelectedProductsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('selected_product_id')->unsigned();
+            $table->integer('amount');
             $table->timestamps();
             $table->foreign('order_id')->references('id')
                 ->on('orders')->onDelete('cascade');

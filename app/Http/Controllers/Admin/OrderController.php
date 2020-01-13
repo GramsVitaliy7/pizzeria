@@ -18,9 +18,6 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::with(['user', 'selectedProducts'])->latest()->paginate(10);
-        foreach ($orders as $order) {
-            $order->total = $order->getOrderTotalPrice();
-        }
         return view('admin.orders.index', compact(['orders']));
     }
 
