@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -36,7 +35,6 @@ class Product extends Model
 
     public function scopeFilter($query)
     {
-        dd(request()->all());
         //filter product category
         if (request('category')) {
             $query->where('products.category_id', '=', request('category'));
@@ -55,4 +53,34 @@ class Product extends Model
         }
         return $query;
     }
+
+    public function setImageName()
+    {
+        $image = request()->file('image');
+        $imageName = 'product-image-' . time() . '.' . $image->getClientOriginalExtension();
+        $this->image_name = $imageName;
+    }
+
+    public function setVariantRelations() {
+        $variantInputs = request()->input('variants');
+        if (!empty($variantInputs)) {
+            foreach ($variantInputs as $variantInput) {
+                $variant = new ProductVariant();
+                $variant->fill($variantInput);
+                $this->productVariants()->save($variant);
+            }
+        }
+    }
+
+    public function setDopingRelations() {
+        $dopingInputs = request()->input('dopings');
+        if (!empty($dopingInputs)) {
+            foreach ($dopingInputs as $dopingInput) {
+                $doping = new ProductDoping();
+                $doping->fill($dopingInput);
+                $this->productDopings()->save($doping);
+            }
+        }
+    }
+
 }
