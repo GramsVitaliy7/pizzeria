@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+
 class ProductDoping extends Model
 {
     /**
@@ -13,6 +15,7 @@ class ProductDoping extends Model
         'name',
         'price',
     ];
+
     public function product() {
         return $this->belongsTo(ProductDoping::class, 'product_id', 'id');
     }
@@ -24,4 +27,5 @@ class ProductDoping extends Model
     public function selectedProducts() {
         return $this->belongsToMany(ProductDoping::class,'product_dopings_selected_products');
     }
+
 }
