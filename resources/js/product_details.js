@@ -26,11 +26,6 @@ $(document).ready(function () {
                         '<input type="checkbox" name="doping" autocomplete="off" value="'+ value.id + '">' +
                         value.name +
                         '</label>';
-                    html += '<div class="btn-group-toggle" data-toggle="buttons">' +
-                        '<label class="btn btn-secondary active">' +
-                        '<input type="checkbox" name="doping" autocomplete="off" value="'+ 5 + '">' +
-                        value.name +
-                        '</label>';
                 });
                 $('.modal-product-doping').html(html);
                 $('.store-cart').data('url', response.url);
@@ -49,11 +44,10 @@ $(document).ready(function () {
                 dopings: $(".modal-body").find('input[name="doping"]:checked').map(function() {return this.value;}).get()
             },
             success: function (response) {
-                console.log(response.success);
                 $('.modal-product-price').html(response.price);
             },
             error: function (response) {
-                console.log(response.error);
+
             }
         });
     });

@@ -56,7 +56,12 @@ Route::group(['prefix' => 'shopping_cart', 'as' => 'shopping_cart.'], function (
         ->name('delete');
     Route::get('/', 'ShoppingCartController@index')
         ->name('index');
+    Route::get('/user_info', 'UserInfoController@index')
+        ->name('user_info.index');
+    Route::post('/payment', 'PaymentController@index')
+        ->name('payment.index');
 });
+
 
 Route::group(['middleware' => 'auth'], function () {
     //auth routes
@@ -71,3 +76,4 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/orders', 'OrderController')->only(['index', 'show']);
     });
 });
+

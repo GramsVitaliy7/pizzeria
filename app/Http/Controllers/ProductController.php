@@ -6,6 +6,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductDoping;
 use App\Models\ProductVariant;
 use App\Models\Product;
+use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,23 +40,30 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $min_price = 0;
-        if ($product->productVariants) {
-            $prices = [];
-            foreach ($product->productVariants as $variant) {
-                array_push($prices, $variant->price);
+        try {
+            $min_price = 0;
+
+            if ($product->productVariants) {
+                $prices = [];
+                foreach ($product->productVariants as $variant) {
+                    array_push($prices, $variant->price);
+                }
+                $min_price = min($prices);
             }
-            $min_price = min($prices);
+            return response()->json([
+                'url' => route('shopping_cart.store', $product->id),
+                'title' => $product->title,
+                'image_name' => $product->image_name,
+                'description' => $product->description,
+                'price' => $min_price,
+                'variants' => $product->productVariants,
+                'dopings' => $product->productDopings,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'message' => 'Error! Product does not exist!',
+            ]);
         }
-        return response()->json([
-            'url' => route('shopping_cart.store', $product->id),
-            'title' => $product->title,
-            'image_name' => $product->image_name,
-            'description' => $product->description,
-            'price' => $min_price,
-            'variants' => $product->productVariants,
-            'dopings' => $product->productDopings,
-        ]);
     }
 
     /**
@@ -66,18 +74,24 @@ class ProductController extends Controller
      */
     public function calculateProductPrice(Request $request)
     {
-        $price = ProductVariant::find($request->input('variant'))->price;
-        $dopings = ProductDoping::find($request->input('dopings'));
-        $doping_price = 0;
-        if ($dopings) {
-            foreach ($dopings as $doping) {
-                $doping_price += $doping->price;
+        try {
+            $price = ProductVariant::find($request->input('variant'))->price;
+            $dopings = ProductDoping::find($request->input('dopings'));
+            $doping_price = 0;
+            if ($dopings) {
+                foreach ($dopings as $doping) {
+                    $doping_price += $doping->price;
+                }
             }
+            $total = $price + $doping_price;
+            return response()->json([
+                'price' => $total,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'Error' => 'Error product price calculating',
+            ]);
         }
-        $total = $price + $doping_price;
-        return response()->json([
-            'price' => $total,
-        ]);
     }
 
 
@@ -101,71 +115,8 @@ class ProductController extends Controller
                 ->paginate(16);
             $view = view('partials._products_table', compact('products'))->render();
             return response()->json(['html' => $view]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public
-    function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return Response
-     */
-    public
-    function store(Request $request)
-    {
-        //
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Product $product
-     * @return Response
-     */
-    public
-    function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Product $product
-     * @return Response
-     */
-    public
-    function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Product $product
-     * @return Response
-     */
-    public
-    function destroy(Product $product)
-    {
-        //
-    }
-
-
 }
