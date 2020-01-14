@@ -20,9 +20,11 @@ Route::get('/', function () {
 Auth::routes();
 
 
-
-Route::get('/home', 'HomeController@index')->name('home');
-
+Route::group(['prefix' => 'home', 'as' => 'home.'], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/tracking', 'TrackingController@index')
+        ->name('tracking.index');
+});
 //Route::resource('users', 'UserController')->only('show');
 
 
