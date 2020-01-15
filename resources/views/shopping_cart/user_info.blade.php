@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <form action="{{ route('shopping_cart.payment') }}" method="GET">
+    <form action="{{ route('shopping_cart.payment.index') }}" method="GET">
         @csrf
         <div class="row justify-content-md-center">
             <div class="col-xs-6 col-sm-6 col-md-6">
