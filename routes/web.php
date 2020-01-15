@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/tracking', 'TrackingController@index')
             ->name('tracking.index');
     });
+    Route::resource('/orders', 'OrderController')->only(['index', 'show']);
     //admin routes
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

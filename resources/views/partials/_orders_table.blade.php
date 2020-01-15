@@ -10,7 +10,7 @@
             <td>
                 <div class="col-sm-3 hidden-xs"><img
                         src="{{asset('storage/products/' . $selectedProduct->product_id
-                        . '/' . $selectedProduct->image_name }}" width="100"
+                        . '/' . $selectedProduct->image_name) }}" width="100"
                         height="100"
                         class="img-responsive" alt="product-photo"/></div>
             </td>
