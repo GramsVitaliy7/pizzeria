@@ -15,6 +15,7 @@ class UserInfoController extends Controller
      */
     public function index()
     {
+        $user = null;
         if (Auth::check()) {
             $user = auth()->user();
         }

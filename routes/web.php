@@ -57,6 +57,10 @@ Route::group(['prefix' => 'shopping_cart', 'as' => 'shopping_cart.'], function (
         ->name('payment.index');
 });
 
+Route::resource('/contact_us', 'MessageController')->only(['create', 'store']);
+Route::get('/about_us', 'AboutController@index');
+Route::get('/delivery_info', 'DeliveryInfoController@index');
+
 
 Route::group(['middleware' => 'auth'], function () {
     //auth routes
@@ -66,6 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('tracking.index');
     });
     Route::resource('/orders', 'OrderController')->only(['index', 'show']);
+
     //admin routes
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

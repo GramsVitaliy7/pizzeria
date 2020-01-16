@@ -16,8 +16,9 @@ mix.js('resources/js/app.js', 'public/js')
 
 mix.scripts('resources/js/shopping_cart.js', 'public/js/shopping_cart.js')
     .scripts('resources/js/product_details.js', 'public/js/product_details.js')
-    .scripts('resources/js/product_filter.js', 'public/js/product_filter.js');
-mix.scripts('resources/js/delete_record.js', 'public/js/delete_record.js')
+    .scripts('resources/js/product_filter.js', 'public/js/product_filter.js')
+    .scripts('resources/js/delete_record.js', 'public/js/delete_record.js')
     .scripts('resources/js/create_update_product.js', 'public/js/create_update_product.js')
-    .scripts('resources/js/progress_bar.js', 'public/js/progress_bar.js');
+    .scripts('resources/js/progress_bar.js', 'public/js/progress_bar.js')
+    .scripts('resources/js/send_message.js', 'public/js/send_message.js');
 
