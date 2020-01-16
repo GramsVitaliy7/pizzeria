@@ -19,12 +19,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
-
-Route::get('/home', 'HomeController@index')->name('home');
-
 //Route::resource('users', 'UserController')->only('show');
-
 
 Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
     //show product catalog
@@ -56,11 +51,21 @@ Route::group(['prefix' => 'shopping_cart', 'as' => 'shopping_cart.'], function (
         ->name('delete');
     Route::get('/', 'ShoppingCartController@index')
         ->name('index');
+    Route::get('/user_info', 'UserInfoController@index')
+        ->name('user_info.index');
+    Route::get('/payment', 'PaymentController@index')
+        ->name('payment.index');
 });
+
 
 Route::group(['middleware' => 'auth'], function () {
     //auth routes
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::group(['prefix' => 'home', 'as' => 'home.'], function () {
+        Route::get('/', 'HomeController@index')->name('home');
+        Route::get('/tracking', 'TrackingController@index')
+            ->name('tracking.index');
+    });
+    Route::resource('/orders', 'OrderController')->only(['index', 'show']);
     //admin routes
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
@@ -71,3 +76,4 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/orders', 'OrderController')->only(['index', 'show']);
     });
 });
+

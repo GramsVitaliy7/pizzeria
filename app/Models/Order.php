@@ -24,22 +24,16 @@ class Order extends Model
             SelectedProduct::class,
             'orders_selected_products',
             'order_id',
-            'selected_product_id')
-            ->withPivot('amount');
+            'selected_product_id');
     }
 
-    public function getTotalAttribute() {
+    public function getTotalAttribute()
+    {
         $total = 0;
         foreach ($this->selectedProducts as $selectedProduct) {
-            //calculate all dopings of the selected product
-            foreach ($selectedProduct->productDopings as $doping) {
-                $total += $doping->price;
-            }
-            //sum with the product variant price
-            $total += $selectedProduct->productVariant->price;
-            //multiply with count of such products
-            $total *= $selectedProduct->pivot->amount;
+            $total += $selectedProduct->subtotal;
         }
         return $total;
+
     }
 }

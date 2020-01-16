@@ -54,7 +54,10 @@ $(document).ready(function () {
             method: "PUT",
             data: {
                 variant: $(".modal-body").find('select[name="size"]').val(),
-                dopings: $(".modal-body").find('input[name="doping"]:checked').val().map(function() {return this.value;}).get()
+                dopings: $(".modal-body").find('input[name="doping"]:checked').map(
+                    function () {
+                        return this.value;
+                    }).get()
             },
             success: function (response) {
                 console.log(response.success);

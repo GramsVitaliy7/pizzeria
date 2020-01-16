@@ -28,7 +28,28 @@ class SelectedProduct extends Model
             Order::class,
             'orders_selected_products',
             'selected_product_id',
-            'order_id')
-            ->withPivot('amount');
+            'order_id');
+    }
+
+    public function getSubtotalAttribute() {
+        $subtotal = 0;
+        foreach ($this->productDopings as $doping) {
+            $subtotal += $doping->price;
+        }
+        $subtotal += $this->productVariant->price;
+        $subtotal *= $this->amount;
+    return $subtotal;
+    }
+
+    public function getImageNameAttribute() {
+        return $this->productVariant->product->image_name;
+    }
+
+    public function getProductIdAttribute() {
+        return $this->productVariant->product->id;
+    }
+
+    public function getTitleAttribute() {
+        return $this->productVariant->product->title;
     }
 }
