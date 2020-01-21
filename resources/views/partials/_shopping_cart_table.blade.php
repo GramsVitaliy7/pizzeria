@@ -7,12 +7,13 @@
                     class="img-responsive" alt="product-photo"/></div>
         </td>
         <td>{{ $details['title'] }}</td>
-        <td>{{ $details['price'] }}</td>
+        <td>${{ number_format($details['price'], 2) }}</td>
         <td><input type="text" class="amount" value="{{ $details['amount'] }}" class="form-control"
                    placeholder="Amount"></td>
-        <td>{{ $details['price'] * $details['amount'] }}</td>
+        <td>${{ number_format($details['price'] * $details['amount'], 2) }}</td>
         <td>
-            <a href="#" data-url="{{ route('shopping_cart.update', $id) }}" class="update-cart">
+            <a href="#" data-url="{{ route('shopping_cart.update', $id) }}" class="update-cart"
+               data-id="{{ $id }}">
                 <i class="fa fa-refresh"></i>
             </a>
             <a href="#" data-url="{{ route('shopping_cart.delete', $id) }}" class="delete-cart">
@@ -23,6 +24,6 @@
 @endforeach
 <tr>
     <td colspan="6">
-        <h4>Total: {{ $cart['total'] }}</h4>
+        <h4>Total: ${{ number_format($cart['total'], 2) }}</h4>
     </td>
 </tr>

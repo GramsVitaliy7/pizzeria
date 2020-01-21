@@ -81,8 +81,9 @@ class ShoppingCart
      * @return array
      * @throws Throwable
      */
-    public static function update(Request $request)
+    public static function update($request)
     {
+
         $cart = session()->get('cart');
         $cart['products'][$request->id]['amount'] = $request->amount;
         $total = ShoppingCart::getCartTotalPrice($cart);

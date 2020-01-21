@@ -6,6 +6,7 @@ use App\Services\ShoppingCart;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\RequiredIf;
 use Throwable;
 
 class ShoppingCartController extends Controller
@@ -42,38 +43,39 @@ class ShoppingCartController extends Controller
     /**
      * Remove product from the shopping cart.
      *
-     * @param Request $request
+     * @param $id
      * @return JsonResponse
      * @throws Throwable
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
         try {
-            $cart = ShoppingCart::delete($request->id);
+            $cart = ShoppingCart::delete($id);
             $view = view('partials._shopping_cart_table', compact('cart'))->render();
             return response()->json(['success' => 'Product was removed from the cart successfully!',
                 'html' => $view]);
         } catch (\Exception $ex) {
-            return response()->json(['error' => 'Product remove failed']);
+            return response()->json(['error' => $ex->getMessage()]);
         }
     }
 
     /**
      * Update the shopping cart.
      *
-     * @param Request $request
+     * @param $id
      * @return JsonResponse
      * @throws Throwable
      */
     public function update(Request $request)
     {
+
         try {
-            $cart = ShoppingCart::update($request->id);
+            $cart = ShoppingCart::update($request);
             $view = view('partials._shopping_cart_table', compact('cart'))->render();
             return response()->json(['success' => 'Product was updated in the cart successfully!',
                 'html' => $view]);
         } catch (\Exception $ex) {
-            return response()->json(['error' => 'Product update failed']);
+            return response()->json(['error' => $ex->getMessage()]);
         }
     }
 }

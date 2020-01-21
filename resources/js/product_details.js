@@ -14,21 +14,31 @@ $(document).ready(function () {
                 $('.modal-product-description').html(response.description);
                 $('.modal-product-price').html(response.price);
                 $.each(response.variants, function (key, value) {
-                    html += '<option value="' + value.id + '">' +
-                        value.size +
-                        '</option>';
+                    $('<option>', {
+                        value: value.id,
+                        text: value.name + ':' + value.size,
+                    }).appendTo('.modal-product-variant');
                 });
-                $('.modal-product-variant').html(html);
-                html = "";
                 $.each(response.dopings, function (key, value) {
-                    html += '<div class="btn-group-toggle" data-toggle="buttons">' +
-                        '<label class="btn btn-secondary active">' +
-                        '<input type="checkbox" name="doping" autocomplete="off" value="'+ value.id + '">' +
-                        value.name +
-                        '</label>';
+                    $('<div>', {
+                        class: 'btn-group-toggle',
+                        'data-toggle': 'buttons',
+                    }).append(
+                        $('<label>', {
+                                class: 'btn btn-secondary active',
+                            }
+                        ).append(
+                        $('<input>', {
+                                type: 'checkbox',
+                                name: 'doping',
+                                autocomplete: 'off',
+                                value: value.id,
+                                text: value.name,
+                            }
+                        ))).appendTo('.modal-product-doping');
                 });
-                $('.modal-product-doping').html(html);
-                $('.store-cart').data('url', response.url);
+
+       $('.store-cart').data('url', response.url);
             },
             error: function (response) {
             }
@@ -41,7 +51,10 @@ $(document).ready(function () {
             method: "POST",
             data: {
                 variant: $(".modal-body").find('select[name="size"]').val(),
-                dopings: $(".modal-body").find('input[name="doping"]:checked').map(function() {return this.value;}).get()
+                dopings: $(".modal-body").find('input[name="doping"]:checked').map(
+                    () => {
+                        return this.value;
+                    }).get()
             },
             success: function (response) {
                 $('.modal-product-price').html(response.price);

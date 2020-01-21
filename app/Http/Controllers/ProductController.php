@@ -27,7 +27,7 @@ class ProductController extends Controller
             'productDopings'
         ])->latest()->paginate(16);
 
-        $categories = ProductCategory::whereNotNull('parent_id')->get()     //get all subcategories
+        $categories = ProductCategory::whereNull('parent_id')->get()     //get all categories
         ->sortBy('name');
         return view('products.index', compact(['products', 'categories']));
     }
@@ -42,8 +42,7 @@ class ProductController extends Controller
     {
         try {
             $min_price = 0;
-
-            if ($product->productVariants) {
+            if ($product->productVariants->count()) {
                 $prices = [];
                 foreach ($product->productVariants as $variant) {
                     array_push($prices, $variant->price);
@@ -61,7 +60,7 @@ class ProductController extends Controller
             ]);
         } catch (Exception $ex) {
             return response()->json([
-                'message' => 'Error! Product does not exist!',
+                'message' => 'Error! Product was not added.',
             ]);
         }
     }

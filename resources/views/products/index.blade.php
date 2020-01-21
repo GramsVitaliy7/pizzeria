@@ -9,7 +9,11 @@
                                 data-url="{{ route('products.filter') }}">
                             <option value="0">All categories</option>
                             @foreach($categories as $category)
-                                <option value="{{$category->id}}">{{ $category->name }}</option>
+                                <optgroup label="{{ $category->name }}">
+                                    @foreach($category->children as $subcategory)
+                                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                    @endforeach
+                                </optgroup>
                             @endforeach
                         </select>
                     </label>
@@ -21,17 +25,17 @@
                 <div class="input-group mb-3">
                     <div class="form-check">
                         <input class="product-filter form-check-input" type="radio" name="price-sort-filter"
-                               id="exampleRadios1"
+                               id="asc-sorting"
                                value="asc">
-                        <label class="form-check-label" for="exampleRadios1">
+                        <label class="form-check-label" for="asc-sorting">
                             Price ASC
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="product-filter form-check-input" type="radio" name="price-sort-filter"
-                               id="exampleRadios2"
+                               id="desc-sorting"
                                value="desc">
-                        <label class="form-check-label" for="exampleRadios2">
+                        <label class="form-check-label" for="desc-sorting">
                             Price DESC
                         </label>
                     </div>
@@ -40,9 +44,14 @@
                     <label for="amount">Rating range:</label>
                     <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
                 </p>
-                <input type="hidden" id="hidden_minimum_rating" value="0" />
-                <input type="hidden" id="hidden_maximum_rating" value="5" />
-                <div id="slider-range" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header" style="left: 15%; width: 45%;"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 15%;"></span><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 60%;"></span></div>
+                <input type="hidden" id="hidden_minimum_rating" value="0"/>
+                <input type="hidden" id="hidden_maximum_rating" value="5"/>
+                <div id="slider-range" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                    <div class="ui-slider-range ui-corner-all ui-widget-header" style="left: 15%; width: 45%;"></div>
+                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"
+                          style="left: 15%;"></span><span tabindex="0"
+                                                          class="ui-slider-handle ui-corner-all ui-state-default"
+                                                          style="left: 60%;"></span></div>
 
             </div>
 

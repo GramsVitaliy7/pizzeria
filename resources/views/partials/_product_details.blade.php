@@ -25,6 +25,7 @@
                 </div>
                 <div class="modal-product-doping btn-group-toggle" data-toggle="buttons">
                 </div>
+
             </div>
             <div class="modal-footer">
                 <a href="#" data-url=""

@@ -46,7 +46,7 @@ Route::group(['prefix' => 'shopping_cart', 'as' => 'shopping_cart.'], function (
     Route::patch('/', 'ShoppingCartController@update')
         ->middleware('ajax_only')
         ->name('update');
-    Route::delete('/', 'ShoppingCartController@delete')
+    Route::delete('/{id}', 'ShoppingCartController@delete')
         ->middleware('ajax_only')
         ->name('delete');
     Route::get('/', 'ShoppingCartController@index')

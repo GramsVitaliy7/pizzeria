@@ -8,11 +8,13 @@ $(document).ready(function () {
     $(document).on('click', '.update-cart', function (e) {
         e.preventDefault();
         let self = $(this);
+        console.log(self.closest("tr").find('.amount').val());
         $.ajax({
             url: $(self).data("url"),
             method: "PATCH",
             data: {
-                amount: self.closest("tr").find('.amount').val()
+                id: $(self).data("id"),
+                amount: self.closest("tr").find('.amount').val(),
             },
             success: function (response) {
                 $('.record-list').fadeOut().html(response.html).fadeIn();
@@ -55,7 +57,7 @@ $(document).ready(function () {
             data: {
                 variant: $(".modal-body").find('select[name="size"]').val(),
                 dopings: $(".modal-body").find('input[name="doping"]:checked').map(
-                    function () {
+                    () => {
                         return this.value;
                     }).get()
             },
